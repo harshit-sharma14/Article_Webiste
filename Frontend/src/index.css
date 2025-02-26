@@ -1,0 +1,5 @@
+@import "tailwindcss";
+.display-content {
+    white-space: pre-wrap;
+  }
+  
