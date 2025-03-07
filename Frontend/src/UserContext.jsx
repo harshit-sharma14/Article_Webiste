@@ -23,7 +23,7 @@ export const UserContextProvider=({children})=>{
      if (ready && !user) {  // Wait until localStorage check is done
          const token = localStorage.getItem("token");
          if (token) {
-             axios.get("http://localhost:5000/user", {
+             axios.get("http://localhost:5000/getuser", {
                  headers: { Authorization: `Bearer ${token}` },
              })
              .then(({ data }) => {

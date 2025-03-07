@@ -326,10 +326,19 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       res.status(500).json(e);
     }
   })
-  app.listen(5000,()=>{
-    console.log('Server is running on port 5000')
-})
 
+  app.delete("/articles/:id",auth, async (req, res) => {
+    try {
+      const deletedItem = await Posts.findByIdAndDelete(req.params.id);
+      if (!deletedItem) {
+        return res.status(404).json({ message: "Item not found" });
+      }
+      res.json({ message: "Item deleted successfully", deletedItem });
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting item", error });
+    }
+  });
+  app.listen(5000, '0.0.0.0', () => console.log('Server running...'));
 
 //multer
   // const storage = multer.memoryStorage();
