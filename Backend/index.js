@@ -391,7 +391,7 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
     res.status(200).json({ message: "OTP verified successfully" });
   });
   
-  app.listen(process.env.PORT||5000, '0.0.0.0', () => console.log('Server running...'));
+  app.listen(process.env.PORT||5000,  () => console.log('Server running...'));
 
 //multer
   // const storage = multer.memoryStorage();
