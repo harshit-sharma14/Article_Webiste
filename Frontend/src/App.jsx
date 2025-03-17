@@ -1,6 +1,6 @@
 import React from 'react'
 import { UserContextProvider } from './UserContext'
-import {Route,Router,Routes} from 'react-router-dom'
+import {HashRouter as Route,Router,Routes} from 'react-router-dom'
 import Home from './Pages/Home'
 import Login from './Pages/Login'
 import Register from './Pages/Register'
