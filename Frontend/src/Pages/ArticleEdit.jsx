@@ -11,6 +11,7 @@ const ArticleEdit = () => {
     const [comment,setComment] = useState("");
     const { user } = useContext(UserContext);
     const { id } = useParams();
+    
    var userId;
 if(user){
     userId = user._id;

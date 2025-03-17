@@ -19,11 +19,19 @@ import AboutUs from './Pages/AboutUs'
 import ContactPage from './Pages/Contact'
 axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
+import { useAuth0 } from "@auth0/auth0-react";
+
 const App = () => {
+  const {user, isAuthenticated} = useAuth0();
+  const {loginWithRedirect} = useAuth0();
   return (
     <div>
       <UserContextProvider>
+      
+     
         <Routes>
+          
+           
           <Route path="/" element={<Home />} /> 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

@@ -4,6 +4,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Navbar from "./Navbar";
 import { UserContext } from "../UserContext";
+import Footer from "./Footer";
 
 const CreatePost = () => {
     const [formData, setFormData] = useState({
@@ -189,6 +190,7 @@ const CreatePost = () => {
           </div>
         </div>
       </div>
+      <Footer/>
       </div>
 
 

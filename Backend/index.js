@@ -5,6 +5,7 @@ const { ObjectId } = require('mongodb');
 const cors=require('cors');
 const bodyParser=require('body-parser');
 const multer=require('multer');
+const OTP=require('./models/OTP')
 // const cookieParser=require('cookie-parser');
 const dotenv=require('dotenv');
 // const expressValidator=require('express-validator');
@@ -16,7 +17,7 @@ const jwt = require('jsonwebtoken');
 const path = require("path");
 const crypto=require('crypto')
 const { verifyToken, isAdmin, isEditor } = require("./Middleware");
-
+const nodemailer=require('nodemailer');
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -338,7 +339,59 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       res.status(500).json({ message: "Error deleting item", error });
     }
   });
-  app.listen(5000, '0.0.0.0', () => console.log('Server running...'));
+
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: 'harshit14922@gmail.com',
+      pass: 'Harshit1408@',
+    },
+  });
+  app.post("/send-otp", async (req, res) => {
+    const { email } = req.body;
+  
+    if (!email) return res.status(400).json({ message: "Email is required" });
+  
+    // Generate OTP
+    const otp = crypto.randomInt(100000, 999999).toString();
+  
+    // Store OTP in DB
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes expiry
+    await OTP.create({ email, otp, expiresAt });
+  
+    // Send OTP via email
+    const mailOptions = {
+      from: "harshit14922@gmail.com",
+      to: email,
+      subject: "Your OTP Code",
+      text: `Your OTP code is ${otp}. It will expire in 5 minutes.`,
+    };
+  
+    transporter.sendMail(mailOptions, (error) => {
+      if (error) return res.status(500).json({ message: error });
+      res.status(200).json({ message: "OTP sent successfully" });
+    });
+  });
+  
+  // Verify OTP
+  app.post("/verify-otp", async (req, res) => {
+    const { email, otp } = req.body;
+  
+    const otpRecord = await OTP.findOne({ email, otp });
+  
+    if (!otpRecord) return res.status(400).json({ message: "Invalid OTP" });
+  
+    if (otpRecord.expiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+  
+    await OTP.deleteOne({ email });
+  
+    res.status(200).json({ message: "OTP verified successfully" });
+  });
+  
+  app.listen(process.env.PORT||5000, '0.0.0.0', () => console.log('Server running...'));
 
 //multer
   // const storage = multer.memoryStorage();

@@ -19,7 +19,7 @@ const postSchema = new mongoose.Schema(
     },
     excerpt: {
       type: String,
-      required: true,
+      // required: true,
       maxlength: 300, // Short preview text
     },
     author: {

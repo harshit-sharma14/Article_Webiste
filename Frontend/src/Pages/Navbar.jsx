@@ -3,6 +3,7 @@ import { UserContext } from "../UserContext";
 import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import ArticleCategory from "./ArticleCategory";
+import { ChevronDown } from "lucide-react";
 
 const Navbar = () => {
     const categories = [
@@ -16,6 +17,11 @@ const Navbar = () => {
         "World",
         "Lifestyle",
       ];
+ const [issel, setIsel] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!issel);
+  };
     const { user, setUser } = useContext(UserContext);
     console.log(user);
     const [isOpen, setIsOpen] = useState(false);
@@ -52,12 +58,21 @@ const Navbar = () => {
       <Link to="/contact" className="hover:text-yellow-300 transition">
         Contact Us
       </Link>
-      <div className="relative group">
-        {/* Categories Trigger */}
-        <span className="cursor-pointer hover:underline">Categories</span>
+      <div className="relative group inline-block">
+      {/* Categories Trigger */}
+      <div
+        className="flex items-center cursor-pointer hover:underline"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        Categories
+        <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-200" 
+          style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }} 
+        />
+      </div>
 
-        {/* Dropdown Menu */}
-        <div className="absolute left-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg opacity-0 group-hover:opacity-100 group-hover:block transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
+      {/* Dropdown Menu */}
+      {isOpen && (
+        <div className="absolute  left-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg border border-gray-200">
           {categories.map((category, index) => (
             <a
               key={index}
@@ -68,7 +83,8 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-      </div>
+      )}
+    </div>
     </div>
 
     {/* Authentication Section */}
