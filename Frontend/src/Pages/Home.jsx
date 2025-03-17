@@ -3,6 +3,7 @@ import Navbar from './Navbar'
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
+import HorizontalScroll from './HorizontalScroll';
 const Home = () => {
   const [articles,setArticles]=useState([]);
   useEffect(() => {
@@ -20,7 +21,7 @@ const Home = () => {
     <div>
       <Navbar />
       {articles && articles.length>0 && <div className="bg-gray-800 from-blue-500 to-indigo-600 text-white text-center py-6 px-4  shadow-lg">
-      <div className='flex h-[6vh] justify-between items-center'>
+      {/* <div className='flex h-[6vh] justify-between items-center'>
       <h2 className="px-2 sm:h-auto hidden md:block text-sm md:text-xl md:font-bold mb-2">🚀 Check Out Our Latest Post!</h2>
       <p className="sm:text-sm md:text-lg font-medium">{articles[0].title}</p>
       
@@ -30,7 +31,8 @@ const Home = () => {
       >
         Read Now →
       </Link>
-      </div>
+      </div> */}
+      <HorizontalScroll articles={articles} />
     </div>}
     {/* <div className='w-full h-full flex flex-col items-center'> */}
       <div className="w-[100vw] flex flex-col lg:flex-row justify-center items-start px-6 py-8 bg-gray-50 min-h-screen">

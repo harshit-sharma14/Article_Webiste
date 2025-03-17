@@ -1,6 +1,7 @@
 const express=require('express');
 const mongoose=require('mongoose');
 const { ObjectId } = require('mongodb');
+const transliterate = require('transliteration').transliterate; // Install first
 
 const cors=require('cors');
 const bodyParser=require('body-parser');
@@ -30,18 +31,11 @@ const User=require('./models/Users');
 const UserSuggestions=require('./models/UserSuggestion')
 
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
-});
 app.use(cors({
     credentials:true,
-    origin:'https://article-webiste-frontend.onrender.com'
+    // origin:['https://article-webiste-frontend.onrender.com','https://localhost:5173']
+    origin:'http://localhost:5173'
 }))
 //Website02
 //moingoose connection
@@ -137,11 +131,19 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
   try {
 
     const { title, content, excerpt, category, tags, published } = req.body;
-    console.log('User',req.user)
+    console.log('User',req.body.title)
+    
+    const transliteratedTitle = transliterate(title); // "पर्यावरण" → "Paryavaran"
+    let slugBase = slugify(transliteratedTitle, { lower: true, strict: true }) || "untitled";
+    let slug = slugBase;
+    while (await Post.findOne({ slug })) {
+      slug = `${slugBase}-${counter}`;
+      counter++;
+    }
     // Create new post object
     const post = new Post({
       title,
-      slug: slugify(title, { lower: true, strict: true }),
+      slug,
       content,
       excerpt,
       category,
