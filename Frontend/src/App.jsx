@@ -26,27 +26,22 @@ const App = () => {
   const {loginWithRedirect} = useAuth0();
   return (
     <div>
-      <UserContextProvider>
-      
-     
-        <Routes>
-          
-           
-          <Route path="/" element={<Home />} /> 
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path='/createpost' element={<CreatePost />} />
-          <Route path='/articles' element={<ArticleList />} />
-          <Route path='/articles/:id' element={<ArticlePage />} />
-          <Route path='/footer' element={<Footer />} />
-          <Route path='/articles/:id/edit' element={<EditPost />} />
-          <Route path='/category/:categoryname' element={<ArticleCategory />} />
-          <Route path='/yourarticles/:id' element={<UserArticles />} />
-          <Route path='/aboutus' element={<AboutUs/>}/>
-          <Route path='/contact' element={<ContactPage/>}/>
-          
-        </Routes>
-      </UserContextProvider>
+ <UserContextProvider>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/createpost" element={<CreatePost />} />
+        <Route path="/articles" element={<ArticleList />} />
+        <Route path="/articles/:id" element={<ArticlePage />} />
+        <Route path="/footer" element={<Footer />} />
+        <Route path="/articles/:id/edit" element={<EditPost />} />
+        <Route path="/category/:categoryname" element={<ArticleCategory />} />
+        <Route path="/yourarticles/:id" element={<UserArticles />} />
+        <Route path="/aboutus" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactPage />} />
+      </Routes>
+    </UserContextProvider>
     </div>
   )
 }
