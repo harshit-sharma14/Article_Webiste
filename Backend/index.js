@@ -28,6 +28,17 @@ app.use(express.json());
 //models import
 const User=require('./models/Users');
 const UserSuggestions=require('./models/UserSuggestion')
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static frontend files
+app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/build", "index.html"));
+});
 app.use(cors({
     credentials:true,
     origin:'https://article-webiste-frontend.onrender.com'
