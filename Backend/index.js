@@ -34,8 +34,8 @@ const UserSuggestions=require('./models/UserSuggestion')
 
 app.use(cors({
     credentials:true,
-    // origin:['https://article-webiste-frontend.onrender.com','https://localhost:5173']
-    origin:'http://localhost:5173'
+    origin:'https://article-webiste-frontend.onrender.com'
+    // origin:'http://localhost:5173'
 }))
 //Website02
 //moingoose connection
