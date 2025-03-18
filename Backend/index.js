@@ -34,8 +34,8 @@ const UserSuggestions=require('./models/UserSuggestion')
 
 app.use(cors({
     credentials:true,
-    origin:'https://article-webiste-frontend.onrender.com'
-    // origin:'http://localhost:5173'
+    // origin:'https://article-webiste-frontend.onrender.com'
+    origin:'https://www.satyasaarthi.com'
 }))
 //Website02
 //moingoose connection
@@ -98,6 +98,7 @@ const generateToken = (id) => {
       res.status(401).json({ msg: "Invalid token" });
     }
   };
+  
   app.get("/api/user", auth, async (req, res) => {
     try {
       const user = await User.findById(req.user.id).select("-password");
@@ -126,7 +127,42 @@ const storage=new CloudinaryStorage({
   },
 });
 const upload=multer({storage:storage});
+app.post('/setProfileImage',auth,upload.single("coverImage"),async (req,res)=>{
+  try {
+    // Check if a file was uploaded
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
+    // Get the authenticated user's ID from the request
+    const userId = req.user.id;
+
+    // Construct the file path or URL
+    const filePath = req.file.path; // Local file path
+    // If using cloud storage (e.g., AWS S3), you would upload the file here and get the URL
+
+    // Update the user's profile in the database
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { avatar: filePath }, // Save the file path or URL to the user's profile
+      { new: true } // Return the updated user
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Send success response
+    res.status(200).json({
+      message: "Profile image uploaded successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error uploading profile image:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+
+})
 app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
   try {
 
@@ -225,10 +261,12 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
-  app.get("/getarticle/:id", async (req, res) => {
+  app.get("/getarticle/:slug", async (req, res) => {
     try {
-      const article = await Post.findById(req.params.id).populate("author", "_id name email").populate("comments.user", "name email");
+      console.log(req.params.slug)
+      const article = await Post.findOne({ slug: req.params.slug }).populate("author", "_id name email").populate("comments.user", "name email");
       if (!article) return res.status(404).json({ message: "Article not found" });
+      
       res.json(article);
     } catch (error) {
       res.status(500).json({ message: "Server error", error });
