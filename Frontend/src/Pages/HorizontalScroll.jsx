@@ -33,7 +33,7 @@ const HorizontalScroll = ({ articles }) => {
     <div className="bg-gray-800 py-2">
       <Slider {...settings}>
         {articles.map((article, index) => (
-          <Link to={`/articles/${article._id}`} key={index} className="px-2">
+          <Link to={`/articles/${article.slug}`} key={index} className="px-2">
             <div className="p-4 bg-transparent shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
               <h3 className="text-lg font-semibold text-white text-center">
                 {article.title}
