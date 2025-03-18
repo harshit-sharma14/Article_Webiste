@@ -31,7 +31,7 @@ const ArticlesList = () => {
         to={`/articles/${articles[0]._id}`} 
         className="lg:col-span-2 block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition transform hover:-translate-y-1"
       >
-        <div className="relative">
+        <div className="relative h-100">
           <img 
             src={articles[0].coverImage} 
             alt={articles[0].title} 
@@ -53,7 +53,7 @@ const ArticlesList = () => {
 
       {/* Side Articles */}
       <div className="grid grid-cols-1 gap-6">
-        {articles.slice(1, 3).map(article => (
+        {articles.slice(1, 5).map(article => (
           <Link 
             to={`/articles/${article._id}`} 
             key={article._id} 
@@ -63,7 +63,7 @@ const ArticlesList = () => {
               <img 
                 src={article.coverImage} 
                 alt={article.title} 
-                className="w-full h-40 object-cover"
+                className="w-full h-60 object-cover"
               />
               <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs uppercase font-semibold px-3 py-1 rounded-md">
                 {article.category || "News"}

@@ -8,7 +8,13 @@ import { Link } from "react-router-dom";
 import ArticleCategory from "./ArticleCategory";
 import ExploreMore from "./ExploreMore";
 const ArticlePage = ({ userId }) => {
-  const [articles,setArticles]=useState([]);
+  const [articles,setArticles]=useState(null);
+  const { slug } = useParams();
+  const [article, setArticle] = useState(null);
+  const [likes, setLikes] = useState(0);
+  const [liked, setLiked] = useState(false);
+  const [comment, setComment] = useState("");
+  const { user } = useContext(UserContext);
   useEffect(() => {
     axios.get("/getallarticles")
       .then(response => {
@@ -19,77 +25,67 @@ const ArticlePage = ({ userId }) => {
         console.error("Error fetching articles:", error);
       });
   }, []);
-  const { id } = useParams();
-  const [article, setArticle] = useState(null);
-  const [likes, setLikes] = useState(0);
-  const [liked, setLiked] = useState(false);
-  const [comment, setComment] = useState("");
-const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await axios.get(`/getarticle/${id}`);
+        const res = await axios.get(`/getarticle/${slug}`);
         setArticle(res.data);
-        console.log(res.data);
-        setLikes(res.data.likes.length);
-        if(user){
-            setLiked(res.data.likes.some(like => like.user === user._id)); // Check if user liked
 
+        setLikes(res.data.likes.length);
+        if (user) {
+          setLiked(res.data.likes.some(like => like.user === user._id)); // Check if user liked
         }
       } catch (error) {
         console.error("Error fetching article:", error);
       }
     };
     fetchArticle();
-  }, [id, userId]);
+  }, [slug, user]); // Use user instead of userId
 
   const handleLike = async () => {
     try {
-        if(user){
-            const res = await axios.post(`/articles/${id}/like`, { userId: user._id }, { headers: { Authorization: `Bearer ${user.token}` } });
-            setLikes(res.data.likes);
-            setLiked(!liked); // Toggle the liked state
-        }
-    //   const res = await axios.post(`/articles/${id}/like`, { userId });
-    //   setLikes(res.data.likes);
-    //   setLiked(!liked); // Toggle the liked state
+      if (user) {
+        const res = await axios.post(`/articles/${article._id}/like`, { userId: user._id }, { headers: { Authorization: `Bearer ${user.token}` } });
+        setLikes(res.data.likes);
+        setLiked(!liked); // Toggle the liked state
+      }
     } catch (error) {
       console.error("Error liking article:", error);
     }
   };
-   const  handleComment= async () => {
+
+  const handleComment = async () => {
     try {
-        if(user){
-            const res = await axios.post(`/articles/${id}/comment`, { userId: user._id, text:comment }, { headers: { Authorization: `Bearer ${user.token}` } });
-            setComment(res.data);
-            console.log(res.data);
-            setComment("");
-        }
+      if (user) {
+        const res = await axios.post(`/articles/${article._id}/comment`, { userId: user._id, text: comment }, { headers: { Authorization: `Bearer ${user.token}` } });
+        setComment(res.data);
+        console.log(res.data);
+        setComment("");
+      }
     } catch (error) {
-        console.error("Error commenting on article:", error);
+      console.error("Error commenting on article:", error);
     }
-    };
+  };
 
-    const handleDelete = async () => {
-        try {
-            if(user){
-              await axios.delete(`/articles/${id}`, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`
-                }
-              });
-                alert("Article deleted successfully");
-                window.location.href = "/";
-            }
-        } catch (error) {
-            console.error("Error deleting article:", error);
-        }
-    };
-    const DisplayContent = ({ content }) => {
-      return <div dangerouslySetInnerHTML={{ __html: content }} />;
-    };
-    
+  const handleDelete = async () => {
+    try {
+      if (user) {
+        await axios.delete(`/articles/${article._id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        alert("Article deleted successfully");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Error deleting article:", error);
+    }
+  };
 
+  const DisplayContent = ({ content }) => {
+    return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  };
   if (!article) return <p>Loading...</p>;
 
   return (
@@ -238,8 +234,8 @@ const { user } = useContext(UserContext);
   <h1 className="text-3xl sm:text-4xl font-bold mb-4">LATEST</h1>
   <div className="w-[50px] border-b-2 border-red-700 mb-8"></div>
   <div className="space-y-6">
-    {articles.map((i, key) => (
-      <Link to={`/articles/${i._id}`} key={key}  className="group border border-t-0 border-r-0 border-l-0 cursor-pointer border-b-black">
+    {articles&&articles.map((i, key) => (
+      <Link to={`/articles/${i.slug}`} key={key}  className="group border border-t-0 border-r-0 border-l-0 cursor-pointer border-b-black">
         <div className="w-full gap-4 sm:gap-6 py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-300 flex flex-col sm:flex-row items-start sm:items-center">
           <img
             src={i.coverImage}

@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Link } from 'react-router-dom';
 
 const HorizontalScroll = ({ articles }) => {
   const settings = {
@@ -29,16 +30,16 @@ const HorizontalScroll = ({ articles }) => {
   };
 
   return (
-    <div className="bg-gray-800 py-6">
+    <div className="bg-gray-800 py-2">
       <Slider {...settings}>
         {articles.map((article, index) => (
-          <div key={index} className="px-2">
-            <div className="p-4 bg-gray-800 shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
+          <Link to={`/articles/${article._id}`} key={index} className="px-2">
+            <div className="p-4 bg-transparent shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
               <h3 className="text-lg font-semibold text-white text-center">
                 {article.title}
               </h3>
             </div>
-          </div>
+          </Link>
         ))}
       </Slider>
     </div>

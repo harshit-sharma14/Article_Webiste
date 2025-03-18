@@ -21,6 +21,7 @@ axios.defaults.baseURL = 'https://article-webiste-backend.onrender.com'
 // axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
 import { useAuth0 } from "@auth0/auth0-react";
+import Profile from './Pages/Profile'
 
 const App = () => {
   const {user, isAuthenticated} = useAuth0();
@@ -34,13 +35,14 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/articles" element={<ArticleList />} />
-        <Route path="/articles/:id" element={<ArticlePage />} />
+        <Route path="/articles/:slug" element={<ArticlePage />} />
         <Route path="/footer" element={<Footer />} />
         <Route path="/articles/:id/edit" element={<EditPost />} />
         <Route path="/category/:categoryname" element={<ArticleCategory />} />
         <Route path="/yourarticles/:id" element={<UserArticles />} />
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/contact" element={<ContactPage />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </UserContextProvider>
     </div>

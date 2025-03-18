@@ -40,7 +40,7 @@ const ExploreMore = ({categoryname}) => {
     ) : articles.length === 0 ? (
       <p className="text-center text-gray-500">No articles found.</p>
     ) : (
-      <div className="grid md:grid-cols-5 sm:grid-cols-2 gap-10">
+      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-10">
         {articles.map((article) => (
           <div
             key={article._id}
@@ -55,7 +55,7 @@ const ExploreMore = ({categoryname}) => {
               <h2 className="text-xl font-semibold text-gray-800">{article.title}</h2>
               <p className="text-gray-600 mt-2 text-sm line-clamp-3">{article.excerpt}</p>
               <a
-                href={`/articles/${article._id}`}
+                href={`/articles/${article.slug}`}
                 className="mt-4 inline-block text-blue-500 font-semibold hover:underline"
               >
                 Read More →

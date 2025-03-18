@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import ArticleCategory from "./ArticleCategory";
 import { ChevronDown } from "lucide-react";
-
+import image from  './SATYA.png' 
 const Navbar = () => {
     const categories = [
         "Politics",
@@ -36,7 +36,7 @@ const Navbar = () => {
   <div className="container mx-auto flex h-auto justify-between items-center px-6">
     {/* Logo */}
     <Link to="/" className="text-3xl font-extrabold tracking-wide text-yellow-400">
-      MyBlog
+      <img className="h-auto w-[10vw]" src={image} alt="" />
     </Link>
 
     {/* Mobile Menu Toggle */}

@@ -34,25 +34,28 @@ const Home = () => {
       </div> */}
       <HorizontalScroll articles={articles} />
     </div>}
+    <h1 className="text-4xl font-extrabold text-center mt-4 text-gray-900 border-b-4 border-red-600 pb-3">
+    LATEST NEWS
+  </h1>
     {/* <div className='w-full h-full flex flex-col items-center'> */}
       <div className="w-[100vw] flex flex-col lg:flex-row justify-center items-start px-6 py-8 bg-gray-50 min-h-screen">
         {/* Left Side - Featured Article */}
         {articles && articles.length > 0 && (
           <div className="lg:w-[60%] w-full flex flex-col items-center p-4">
-            <Link to={`/articles/${articles[0]._id}`} className="relative w-full h-[70vh] rounded-lg overflow-hidden shadow-lg">
-              <img
-                src={articles[0].coverImage}
-                className="w-full cursor-pointer hover:scale(110%) h-full object-cover brightness-90 hover:brightness-100 transition duration-300"
-                alt="Main Article"
-              />
-              <span className="absolute top-3 left-3 bg-red-600 text-white text-xs uppercase font-semibold px-3 py-1 rounded-md">
-            {articles[0].category || "Top Story"}
-          </span>
-              <div className="absolute  hover:text-black transition-all duration-300 bottom-0 bg-gradient-to-t from-black/80  to-transparent w-full p-6">
-                <h2 className="text-2xl font-bold text-white">{articles[0].title}</h2>
-                <p className='text-sm text-white'>{articles[0].excerpt}</p>
-              </div>
-            </Link>
+            <Link to={`/articles/${articles[0].slug}`} className="relative w-full h-[70vh] rounded-lg overflow-hidden shadow-lg">
+  <img
+    src={articles[0].coverImage}
+    className="w-full cursor-pointer hover:scale(110%) h-full object-cover brightness-90 hover:brightness-100 transition duration-300"
+    alt="Main Article"
+  />
+  <span className="absolute top-3 left-3 bg-red-600 text-white text-xs uppercase font-semibold px-3 py-1 rounded-md">
+    {articles[0].category || "Top Story"}
+  </span>
+  <div className="absolute hover:text-black transition-all duration-300 bottom-0 bg-gradient-to-t from-black/80 to-transparent w-full p-6">
+    <h2 className="text-2xl font-bold text-white">{articles[0].title}</h2>
+    <p className='text-sm text-white'>{articles[0].excerpt}</p>
+  </div>
+</Link>
           </div>
         )}
 
@@ -61,7 +64,7 @@ const Home = () => {
           <h3 className="text-xl font-semibold text-gray-700">Latest News</h3>
           {articles &&
             articles.slice(1, 5).map((article, index) => (
-              <Link to={`/articles/${article._id}`}
+              <Link to={`/articles/${article.slug}`}
                 key={index}
                 className="w-full flex items-center gap-4 bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer"
               >
