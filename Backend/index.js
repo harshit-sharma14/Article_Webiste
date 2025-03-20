@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'Frontend/dist')));
 
 // Handle React routing, return all requests to React app
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Frontend/dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'Frontend/dist', 'Frontend/index.html'));
 });
 
 app.use(express.urlencoded({ extended: true }));
@@ -40,9 +40,9 @@ const UserSuggestions=require('./models/UserSuggestion')
 
 app.use(cors({
     credentials:true,
-    // origin:'https://article-webiste-frontend.onrender.com'
+   
     origin:'https://www.satyasaarthi.com'
-    // origin:'http://localhost:5173'
+
 }))
 //Website02
 //moingoose connection
