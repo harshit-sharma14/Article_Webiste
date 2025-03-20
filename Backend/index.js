@@ -7,7 +7,7 @@ const cors=require('cors');
 const bodyParser=require('body-parser');
 const multer=require('multer');
 const OTP=require('./models/OTP')
-import { fileURLToPath } from "url";
+
 // const cookieParser=require('cookie-parser');
 const dotenv=require('dotenv');
 // const expressValidator=require('express-validator');
