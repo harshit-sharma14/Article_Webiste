@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import Navbar from "./Navbar";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 const Login = () => {
     const [redirect,setRedirect]=useState(false);
     const { user,setUser,setReady,ready } = useContext(UserContext);
@@ -83,7 +83,7 @@ const Login = () => {
                 {/* Registration Section */}
                 <div className="w-full max-w-md bg-white p-6 mt-6 rounded-lg shadow-lg text-center">
                     <p className="text-gray-600">Don't have an account?</p>
-                    <a href="/register" className="text-blue-500 hover:underline">Register here</a>
+                    <Link href="/useres" className="text-blue-500 hover:underline">Register here</Link>
                 </div>
             </div>
         </div>
