@@ -7,6 +7,7 @@ const cors=require('cors');
 const bodyParser=require('body-parser');
 const multer=require('multer');
 const OTP=require('./models/OTP')
+import { fileURLToPath } from "url";
 // const cookieParser=require('cookie-parser');
 const dotenv=require('dotenv');
 // const expressValidator=require('express-validator');
@@ -23,7 +24,11 @@ const app=express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "client", "build")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "Frontend", "build", "index.html"));
+});
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //models import
@@ -36,6 +41,7 @@ app.use(cors({
     credentials:true,
     // origin:'https://article-webiste-frontend.onrender.com'
     origin:'https://www.satyasaarthi.com'
+    // origin:'http://localhost:5173'
 }))
 //Website02
 //moingoose connection
@@ -47,10 +53,8 @@ mongoose
   const bcryptSalt=bcrypt.genSaltSync(10);
 
 //register and login routes
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
-  };
-  
+
+
   app.post("/api/register", async (req, res) => {
     try {
       const { name, email, password, role, avatar } = req.body;
@@ -399,49 +403,81 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       pass: 'Harshit1408@',
     },
   });
-  app.post("/send-otp", async (req, res) => {
-    const { email } = req.body;
-  
-    if (!email) return res.status(400).json({ message: "Email is required" });
-  
-    // Generate OTP
-    const otp = crypto.randomInt(100000, 999999).toString();
-  
-    // Store OTP in DB
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes expiry
-    await OTP.create({ email, otp, expiresAt });
-  
-    // Send OTP via email
+  const sendOtp = async (email, otp) => {
     const mailOptions = {
-      from: "harshit14922@gmail.com",
-      to: email,
-      subject: "Your OTP Code",
-      text: `Your OTP code is ${otp}. It will expire in 5 minutes.`,
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Your OTP for Verification',
+        text: `Your OTP code is: ${otp}. It is valid for 5 minutes.`,
     };
-  
-    transporter.sendMail(mailOptions, (error) => {
-      if (error) return res.status(500).json({ message: error });
-      res.status(200).json({ message: "OTP sent successfully" });
-    });
-  });
-  
-  // Verify OTP
-  app.post("/verify-otp", async (req, res) => {
-    const { email, otp } = req.body;
-  
-    const otpRecord = await OTP.findOne({ email, otp });
-  
-    if (!otpRecord) return res.status(400).json({ message: "Invalid OTP" });
-  
-    if (otpRecord.expiresAt < new Date()) {
-      return res.status(400).json({ message: "OTP expired" });
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`OTP sent to ${email}`);
+    } catch (error) {
+        console.error('Error sending OTP:', error);
     }
+};
+
   
-    await OTP.deleteOne({ email });
+// let otpStore = {}; 
+// app.post('/api/register/send-otp', async (req, res) => {
+//   const { email } = req.body;
+
+//   // Check if email already exists
+//   let user = await User.findOne({ email });
+//   if (user) return res.status(400).json({ message: 'User already exists' });
+
+//   // Generate OTP
+//   const otp = Math.floor(100000 + Math.random() * 900000);
+//   otpStore[email] = { otp, expires: Date.now() + 5 * 60 * 1000 }; // Expires in 5 minutes
+
+//   await sendOtp(email, otp);
+//   res.json({ message: 'OTP sent to email' });
+// });
+
+// // Register - Step 2: Verify OTP and Create Account
+// app.post('/register/verify-otp', async (req, res) => {
+//   const { name, email, password, role, avatar,otp } = req.body;
+
+//   // Check if OTP is valid
+//   if (!otpStore[email] || otpStore[email].otp !== parseInt(otp) || otpStore[email].expires < Date.now()) {
+//       return res.status(400).json({ message: 'Invalid or expired OTP' });
+//   }
+
+//   // Remove OTP after use
+//   delete otpStore[email];
+
+//   // Hash password and save user
   
-    res.status(200).json({ message: "OTP verified successfully" });
-  });
-  
+
+//       let user = await User.findOne({ email });
+//       if (user) return res.status(400).json({ msg: "User already exists" });
+      
+//       const salt = await bcrypt.genSalt(10);
+//       const hashedPassword = await bcrypt.hash(password, salt);
+      
+//       user = new User({ name, email, password: hashedPassword, role, avatar });
+//       await user.save();
+      
+//       res.status(201).json({ msg: "User registered successfully" });
+// });
+// app.post("/api/login", async (req, res) => {
+//     try {
+//       const { email, password } = req.body;
+//       const user = await User.findOne({ email });
+//       if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+      
+//       const isMatch = await bcrypt.compare(password, user.password);
+//       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+      
+//       const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+//       res.json({ token,user });
+//     } catch (err) {
+//       res.status(500).json({ msg: "Server error" });
+//     }
+//   });
+  // Verify OTP
   app.listen(process.env.PORT||5000,  () => console.log('Server running...'));
 
 //multer
