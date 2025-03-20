@@ -1,4 +1,15 @@
 @import "tailwindcss";
+html,body{
+  margin:0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+body{
+  overflow-x: hidden;
+}
+.bg-nav{
+  background-color: #f75e00;
+}
 .display-content {
     white-space: pre-wrap;
   }

@@ -30,14 +30,19 @@ const HorizontalScroll = ({ articles }) => {
   };
 
   return (
-    <div className="bg-gray-800 py-2">
+    <div className="bg-gray-800 w-[100%] py-2">
       <Slider {...settings}>
         {articles.map((article, index) => (
           <Link to={`/articles/${article.slug}`} key={index} className="px-2">
             <div className="p-4 bg-transparent shadow-md rounded-lg hover:shadow-lg transition-shadow duration-300">
-              <h3 className="text-lg font-semibold text-white text-center">
-                {article.title}
-              </h3>
+            <h3 className="text-lg font-semibold text-white text-center">
+  <span className="hidden sm:inline">{article.title}</span> 
+  <span className="sm:hidden">
+    {article.title.length > 20 ? article.title.substring(0, 20) + "..." : article.title}
+  </span>
+</h3>
+
+
             </div>
           </Link>
         ))}

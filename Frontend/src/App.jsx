@@ -22,13 +22,15 @@ axios.defaults.baseURL = 'https://article-webiste-backend.onrender.com'
 axios.defaults.withCredentials = true
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from './Pages/Profile'
-
+import RefreshOnNavigation from './Pages/RefreshOnNavigation'
 const App = () => {
   const {user, isAuthenticated} = useAuth0();
   const {loginWithRedirect} = useAuth0();
   return (
     <div>
+      <RefreshOnNavigation/>
  <UserContextProvider>
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

@@ -36,7 +36,7 @@ const Navbar = () => {
   <div className="container mx-auto flex h-auto justify-between items-center px-6">
     {/* Logo */}
     <Link to="/" className="text-3xl font-extrabold tracking-wide text-yellow-400">
-      <img className="h-auto w-[10vw]" src={image} alt="" />
+      <img className="h-auto w-[30vw]  md:w-[10vw]" src={image} alt="" />
     </Link>
 
     {/* Mobile Menu Toggle */}
