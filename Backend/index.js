@@ -477,9 +477,9 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
 //     }
 //   });
   // Verify OTP
-  // app.get('*', (req, res) => {
-  //   res.sendFile(path.join(__dirname, 'Frontend/dist', 'Frontend/index.html'));
-  // });
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Frontend/dist', 'Frontend/index.html'));
+  });
   app.listen(process.env.PORT||5000,  () => console.log('Server running...'));
 
 //multer
