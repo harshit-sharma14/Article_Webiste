@@ -23,12 +23,13 @@ const nodemailer=require('nodemailer');
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, 'Frontend/dist')));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "Frontend", "build", "index.html"));
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Frontend/dist', 'index.html'));
 });
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 //models import
