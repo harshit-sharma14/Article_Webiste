@@ -23,6 +23,7 @@ axios.defaults.withCredentials = true
 import { useAuth0 } from "@auth0/auth0-react";
 import Profile from './Pages/Profile'
 import RefreshOnNavigation from './Pages/RefreshOnNavigation'
+import UserRes from './Pages/UserRes'
 const App = () => {
   const {user, isAuthenticated} = useAuth0();
   const {loginWithRedirect} = useAuth0();
@@ -45,6 +46,7 @@ const App = () => {
         <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/useres" element={<UserRes />} />
       </Routes>
     </UserContextProvider>
     </div>
