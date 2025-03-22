@@ -86,7 +86,12 @@ const ArticlePage = ({ userId }) => {
   const DisplayContent = ({ content }) => {
     return <div dangerouslySetInnerHTML={{ __html: content }} />;
   };
-  if (!article) return <p>Loading...</p>;
+  if (!article) return 
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white bg-opacity-75 z-50">
+      <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      <p className="mt-4 text-lg font-semibold text-gray-700">Loading Article....</p>
+    </div>
+  ;
 
   return (
     <div><Navbar/>
