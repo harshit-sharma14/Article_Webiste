@@ -7,6 +7,8 @@ import Footer from "./Footer";
 import { Link } from "react-router-dom";
 import ArticleCategory from "./ArticleCategory";
 import ExploreMore from "./ExploreMore";
+import { FaFacebook, FaTwitter, FaWhatsapp, FaLinkedin, FaShare } from "react-icons/fa";
+import ShareButton from "./ShareButton";
 const ArticlePage = ({ userId }) => {
   const [articles,setArticles]=useState(null);
   const { slug } = useParams();
@@ -15,6 +17,7 @@ const ArticlePage = ({ userId }) => {
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState("");
   const { user } = useContext(UserContext);
+  
   useEffect(() => {
     axios.get("/getallarticles")
       .then(response => {
@@ -161,7 +164,7 @@ const ArticlePage = ({ userId }) => {
   )}
   <span>({likes})</span>
 </button>
-
+<ShareButton title={article.title} url={window.location.href} />
         {user && user.email === article.author.email && (
           <div className="h-auto py-2 flex items-center">
           <Link to={`/articles/${article._id}/edit`} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all shadow-md">
