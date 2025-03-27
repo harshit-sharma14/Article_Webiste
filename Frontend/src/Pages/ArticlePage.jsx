@@ -167,7 +167,7 @@ const ArticlePage = ({ userId }) => {
 <ShareButton title={article.title} url={window.location.href} />
         {user && user.email === article.author.email && (
           <div className="h-auto py-2 flex items-center">
-          <Link to={`/articles/${article._id}/edit`} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all shadow-md">
+          <Link to={`/articles/${article.slug}/edit`} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all shadow-md">
             
           
             Edit Article

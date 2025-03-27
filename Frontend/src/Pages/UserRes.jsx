@@ -1,8 +1,11 @@
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
-
+import Navbar from "./Navbar";
+import { motion, AnimatePresence, useAnimate } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 const UserRes = () => {
+    const navigate=useNavigate();
     const { setUser } = useContext(UserContext);
     const [formData, setFormData] = useState({
         name: "",
@@ -10,6 +13,7 @@ const UserRes = () => {
         password: "",
         avatar: "",
     });
+    const [redirect,setRedirect]=useState(false);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -21,10 +25,13 @@ const UserRes = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/register", formData);
-            setUser(data);
-            alert("User registered successfully");
-            localStorage.setItem("user", JSON.stringify(data));
+            const response = await axios.post("/api/register", formData);
+            const { token, user } = response.data;
+            setUser(user);
+            console.log(user);
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            setRedirect(true);
         } catch (error) {
             console.log(error);
             setError(error.response?.data?.msg || "Registration failed. Try again.");
@@ -32,9 +39,22 @@ const UserRes = () => {
             setLoading(false);
         }
     };
-
+useEffect(()=>{
+        if(redirect){
+            setTimeout(()=>navigate('/login'),2000);
+        }
+    },[redirect,navigate])
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-200">
+        <div>
+            <Navbar/>
+        <div className="flex flex-col justify-center items-center min-h-screen bg-gray-200">
+        <AnimatePresence>
+        {redirect && (
+        <motion.div initial={{opacity:0,y:-20}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-20}} transition={{duration:0.5}} className="bg-green-500 text-white px-4 py-2 rounded-md my-6">
+          User Regestration Successful
+        </motion.div>
+      )}
+        </AnimatePresence>
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold text-center text-gray-700">Create an Account</h2>
                 {error && <p className="text-red-500 text-center mt-2">{error}</p>}
@@ -83,6 +103,7 @@ const UserRes = () => {
                     </button>
                 </form>
             </div>
+        </div>
         </div>
     );
 };

@@ -1,9 +1,13 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext";
 import axios from "axios";
 import Navbar from "./Navbar";
 import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
 const Login = () => {
+    const navigate=useNavigate();
     const [redirect,setRedirect]=useState(false);
     const { user,setUser,setReady,ready } = useContext(UserContext);
     const [formData, setFormData] = useState({
@@ -39,15 +43,25 @@ const Login = () => {
     };
 
 
-    if(redirect){  
-        return <Navigate to="/"/>
-    }
+    useEffect(()=>{
+        if(redirect){
+            setTimeout(()=>navigate('/'),2000);
+        }
+    },[redirect,navigate])
 
 
     return (
         <div>
             <Navbar />
             <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 px-4">
+        <AnimatePresence>
+        {redirect && (
+        <motion.div initial={{opacity:0,y:-20}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-20}} transition={{duration:0.5}} className="bg-green-500 text-white px-4 py-2 rounded-md my-6">
+          Login Successful
+        </motion.div>
+      )}
+        </AnimatePresence>
+            
                 <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
                     <h2 className="text-2xl font-bold text-center text-gray-700">Sign In</h2>
                     {error && <p className="text-red-500 text-center mt-2">{error}</p>}
@@ -76,6 +90,7 @@ const Login = () => {
                             disabled={loading}
                         >
                             {loading ? "Logging in..." : "Login"}
+                            
                         </button>
                     </form>
                 </div>
@@ -83,7 +98,7 @@ const Login = () => {
                 {/* Registration Section */}
                 <div className="w-full max-w-md bg-white p-6 mt-6 rounded-lg shadow-lg text-center">
                     <p className="text-gray-600">Don't have an account?</p>
-                    <Link href="/useres" className="text-blue-500 hover:underline">Register here</Link>
+                    <Link to="/useres" className="text-blue-500 hover:underline">Register here</Link>
                 </div>
             </div>
         </div>
