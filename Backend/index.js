@@ -7,7 +7,7 @@ const cors=require('cors');
 const bodyParser=require('body-parser');
 const multer=require('multer');
 const OTP=require('./models/OTP')
-
+const mongoSanitize=require('express-mongo-sanitize')
 // const cookieParser=require('cookie-parser');
 const dotenv=require('dotenv');
 // const expressValidator=require('express-validator');
@@ -33,12 +33,12 @@ app.use(express.json());
 //models import
 const User=require('./models/Users');
 const UserSuggestions=require('./models/UserSuggestion')
-
+app.use(mongoSanitize())
 
 
 app.use(cors({
     credentials:true,
-   
+  //  origin:'http://localhost:5173'
     origin:'https://www.satyasaarthi.com'
 
 }))
@@ -65,8 +65,8 @@ mongoose
       
       user = new User({ name, email, password: hashedPassword, role, avatar });
       await user.save();
-      
-      res.status(201).json({ msg: "User registered successfully" });
+      const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
+      res.status(201).json({ token,user });
     } catch (err) {
       res.status(500).json({ msg: "Server error" });
     }
@@ -228,11 +228,11 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       res.status(500).json({ message: error.message });
     }
   });
-  app.put("/postArticle/:id", auth, upload.single("coverImage"), async (req, res) => {
+  app.put("/postArticle/:slug", auth, upload.single("coverImage"), async (req, res) => {
     try {
       const { title, content, excerpt, category, tags, published } = req.body;
       console.log(req.params.id)
-      const post = await Post.findById(req.params.id);
+      const post = await Post.findOne({slug:req.params.slug});
   
       if (!post) return res.status(404).json({ message: "Post not found" });
   
@@ -240,9 +240,17 @@ app.post("/postArticle",auth, upload.single("coverImage"), async (req, res) => {
       if (req.file) {
         post.coverImage = await req.file.path;
       }
+      const transliteratedTitle = transliterate(title); // "पर्यावरण" → "Paryavaran"
+    let slugBase = slugify(transliteratedTitle, { lower: true, strict: true }) || "untitled";
+    let slug = slugBase;
+    let counter=0;
+    while (await Post.findOne({ slug })) {
+      slug = `${slugBase}-${counter}`;
+      counter++;
+    }
   
       post.title = title || post.title;
-      post.slug = slugify(title || post.title, { lower: true, strict: true });
+      post.slug = slug;
       post.content = content || post.content;
       post.excerpt = excerpt || post.excerpt;
       post.category = category || post.category;
