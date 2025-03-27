@@ -4,10 +4,10 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useParams, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-
+import { motion, AnimatePresence } from "framer-motion";
 const EditPost = () => {
     const [isLoading, setIsLoading] = useState(true); // Add loading state
-
+  const [yes,setYes]=useState(false);
     const { id } = useParams();
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const EditPost = () => {
     const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
-
+    const [redirect,setRedirect]=useState(false);
     useEffect(() => {
         const fetchPost = async () => {
             try {
@@ -91,9 +91,9 @@ const EditPost = () => {
             await axios.put(`/postArticle/${id}`, formDataToSend, {
                 headers: {"Content-Type": "multipart/form-data", Authorization: `Bearer ${localStorage.getItem("token")}`},
             });
-
+            setRedirect(true);
             setMessage("Post updated successfully!");
-            navigate("/dashboard");
+            
         } catch (error) {
             console.error("Post Update Error:", error);
             setMessage(error.response?.data?.message || "Failed to update post.");
@@ -101,9 +101,23 @@ const EditPost = () => {
             setLoading(false);
         }
     };
+    useEffect(()=>{
+            if(redirect){
+                setTimeout(()=>navigate('/'),2000);
+            }
+        },[redirect,navigate])
 
     return (
         <div><Navbar/>
+         <AnimatePresence>
+        {redirect && (
+        <motion.div initial={{opacity:0,y:-20}} animate={{opacity:1,y:0}} exit={{opacity:0,y:-20}} transition={{duration:0.5}} className=" flex justify-center items-center  text-white px-4 py-2 rounded-md my-6">
+          <div className="px-2 py-2 ">
+          Post Updated
+          </div>
+        </motion.div>
+      )}
+        </AnimatePresence>
         {isLoading ? (
             <p>Loading</p>
         ) :<div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
