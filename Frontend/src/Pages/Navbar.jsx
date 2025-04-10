@@ -18,7 +18,7 @@ const Navbar = () => {
         "Lifestyle",
       ];
  const [issel, setIsel] = useState(false);
-
+    let timeoutId;
   const toggleDropdown = () => {
     setIsOpen(!issel);
   };
@@ -58,33 +58,47 @@ const Navbar = () => {
       <Link to="/contact" className="hover:text-yellow-300 transition">
         Contact Us
       </Link>
-      <div className="relative group inline-block">
-      {/* Categories Trigger */}
-      <div
-        className="flex items-center cursor-pointer hover:underline"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        Categories
-        <ChevronDown className="w-4 h-4 ml-1 transition-transform duration-200" 
-          style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }} 
-        />
-      </div>
+      <div className="relative">
+  <div 
+    className="flex items-center cursor-pointer hover:text-blue-600"
+    onMouseEnter={() => {
+      clearTimeout(timeoutId);
+      setIsOpen(true);
+    }}
+    onMouseLeave={() => {
+      timeoutId = setTimeout(() => setIsOpen(false), 200);
+    }}
+  >
+    Categories
+    <ChevronDown 
+      className="w-4 h-4 ml-1 transition-transform duration-200" 
+      style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)" }} 
+    />
+  </div>
 
-      {/* Dropdown Menu */}
-      {isOpen && (
-        <div className="absolute  left-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg border border-gray-200">
-          {categories.map((category, index) => (
-            <a
-              key={index}
-              href={`/category/${category}`}
-              className="block px-4 py-2 text-sm hover:bg-gray-200"
-            >
-              {category}
-            </a>
-          ))}
-        </div>
-      )}
+  {isOpen && (
+    <div 
+      className="absolute left-0 mt-2 w-40 bg-white text-black rounded-lg shadow-lg border border-gray-200"
+      onMouseEnter={() => {
+        clearTimeout(timeoutId);
+        setIsOpen(true);
+      }}
+      onMouseLeave={() => {
+        timeoutId = setTimeout(() => setIsOpen(false), 200);
+      }}
+    >
+      {categories.map((category, index) => (
+        <a
+          key={index}
+          href={`/category/${category}`}
+          className="block px-4 py-2 text-sm hover:bg-gray-200"
+        >
+          {category}
+        </a>
+      ))}
     </div>
+  )}
+</div>
     </div>
 
     {/* Authentication Section */}
