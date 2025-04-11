@@ -179,7 +179,7 @@ const ArticlePage = ({ userId }) => {
       />
     </svg>
   )}
-  <span>({likes})</span>
+  <span>(Login to like)</span>
 </button>
 <ShareButton title={article.title} url={window.location.href} />
         {user && user.email === article.author.email && (
