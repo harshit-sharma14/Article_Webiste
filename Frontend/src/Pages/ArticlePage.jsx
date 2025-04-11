@@ -227,12 +227,22 @@ const ArticlePage = ({ userId }) => {
       onChange={(e) => setComment(e.target.value)}
       className="flex-1 p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
     />
-    <button
+    {user?(
+      <button
       onClick={handleComment}
       className="px-5 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all shadow-md"
     >
       Post
     </button>
+    ):(
+<button
+      onClick={handleComment}
+      className="px-5 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all shadow-md"
+    >
+      Please login to like or comment
+    </button>
+    )}
+    
   </div>
 </div>
 
