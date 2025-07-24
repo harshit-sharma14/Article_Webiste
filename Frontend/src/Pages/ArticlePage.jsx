@@ -127,11 +127,7 @@ const ArticlePage = ({ userId }) => {
       
       {/* Article Actions */}
       <div className="flex items-center gap-4 mt-6">
-      <button
-  onClick={handleLike}
-  className="px-4 py-2 bg-gray-100 rounded-full flex items-center space-x-2 hover:bg-gray-200 active:bg-gray-300 transition-colors"
->
- <button type="button">
+     <button type="button">
   {user ? (
     liked ? (
       <svg

@@ -5,7 +5,7 @@ import { UserContext } from "../UserContext";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Link } from "react-router-dom";
-const ArticlePage = ({ userId }) => {
+const ArticlePage1 = ({ userId }) => {
   const { id } = useParams();
   const [article, setArticle] = useState(null);
   const [likes, setLikes] = useState(0);

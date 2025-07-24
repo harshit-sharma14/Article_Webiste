@@ -1,6 +1,7 @@
 import {React,useEffect,useState,createContext} from "react";
 import axios from "axios";
-export const UserContext = createContext();
+// export const UserContext = createContext();
+export const UserContext=createContext();
 export const UserContextProvider=({children})=>{
      //load the user when page refreshes
      const [user,setUser]=useState(null);
