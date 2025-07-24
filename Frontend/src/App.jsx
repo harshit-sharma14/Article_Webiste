@@ -17,8 +17,8 @@ import EditPost from './Pages/EditPost'
 import UserArticles from './Pages/UserArticles'
 import AboutUs from './Pages/AboutUs'
 import ContactPage from './Pages/Contact'
-// axios.defaults.baseURL = 'https://article-webiste-backend.onrender.com'
-axios.defaults.baseURL = 'http://localhost:5000'
+axios.defaults.baseURL = 'https://article-webiste-backend.onrender.com'
+// axios.defaults.baseURL = 'http://localhost:5000'
 axios.defaults.withCredentials = true
 import { useAuth0 } from "@auth0/auth0-react";
 import ScrollToTop from './Pages/ScrollToTop'
